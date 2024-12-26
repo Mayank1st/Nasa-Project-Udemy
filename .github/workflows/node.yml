@@ -10,11 +10,13 @@ on:
 jobs:
   build:
     env:
-        CI: true
+      CI: true
+      MONGODB_URI: mongodb://locahost/nasa
     strategy:
       matrix:
         os: [ubuntu-latest]
         node-version: [14.x, 16.x]
+        mongodb-version: ["4.2", "4.4"]
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
@@ -23,6 +25,10 @@ jobs:
         uses: actions/setup-node@v2
         with:
           node-version: ${{ matrix.node-version }}
+      - name: Use mongoDb from github actions
+        uses: supercharge/mongodb-github-action@1.11.0
+        with:
+          mongodb-version: ${{ matrix.mongodb-version }}
       - name: Install dependencies
         run: npm install
       - name: Run the build
